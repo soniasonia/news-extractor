@@ -1,0 +1,46 @@
+version: "3"
+
+services:
+# backend:
+#  build:
+#   context: ./app
+#  ports:
+#   - "8000:8000"
+#  volumes:
+#   - ./app:/app
+#  command: >
+#   sh -c "python manage.py wait_for_db &&
+#          python manage.py makemigrations &&
+#          python manage.py migrate &&
+#          python manage.py runserver 0.0.0.0:8000"
+#  environment:
+#   - DB_HOST=db
+#   - DB_NAME=app
+#   - DB_USER=postgres
+#   - DB_PASS=supersecretpassword
+#  depends_on:
+#   - db
+
+    mongo:
+      image: mongo
+      restart: always
+      ports:
+        - "27017:27017"
+      environment:
+        MONGO_INITDB_ROOT_USERNAME: root
+        MONGO_INITDB_ROOT_PASSWORD: secret
+        MONGO_INITDB_DATABASE: mydb
+      volumes:
+        - mongo-data:/data/db
+
+    mongo-express:
+      image: mongo-express
+      restart: always
+      ports:
+        - "8081:8081"
+      environment:
+        ME_CONFIG_MONGODB_ADMINUSERNAME: root
+        ME_CONFIG_MONGODB_ADMINPASSWORD: secret
+
+volumes:
+  mongo-data:
