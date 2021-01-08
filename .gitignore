@@ -4,5 +4,6 @@ pyvenv.cfg
 /lib64
 /bin
 __pycache__/
+flask_session/
 *.log
 .env
