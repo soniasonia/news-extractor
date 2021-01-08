@@ -25,6 +25,7 @@ class DevelopmentConfig(Config):
     This defaults the Database URL that can be created through the docker
     cmd in the setup instructions. You can change this to environment variable as well.
     """
+    # Load environment variables from .env
     load_dotenv()
     MONGO_DBNAME = os.environ.get("MONGO_DBNAME")
     MONGO_HOST = os.environ.get("MONGO_HOST")
@@ -43,10 +44,12 @@ class ProductionConfig(Config):
     You can update it to use a `creds.ini` file or anything you want.
     Requires the environment variable `FLASK_ENV=prod`
     """
-
-    MONGO_URI = os.environ.get(
-        "DATABASE_URL"
-    )  # you may do the same as the development config but this currently gets the database URL from an env variable
+    MONGO_DBNAME = os.environ.get("MONGO_DBNAME")
+    MONGO_HOST = os.environ.get("MONGO_HOST")
+    MONGO_PORT = os.environ.get("MONGO_PORT")
+    MONGO_USERNAME = os.environ.get("MONGO_USERNAME")
+    MONGO_PASSWORD = os.environ.get("MONGO_PASS")
+    MONGO_URI = f"mongodb://{MONGO_USERNAME}:{MONGO_PASSWORD}@{MONGO_HOST}:{MONGO_PORT}/{MONGO_DBNAME}"
     DEBUG = False
 
 
@@ -59,9 +62,13 @@ class DockerDevConfig(Config):
     This will then set up the database with the following hard coded
     credentials.
     """
-    MONGO_URI = os.environ.get(
-        "DATABASE_URL"
-    )
+    # Environment variables are set in docker.env
+    MONGO_DBNAME = os.environ.get("MONGO_DBNAME")
+    MONGO_HOST = os.environ.get("MONGO_HOST")
+    MONGO_PORT = os.environ.get("MONGO_PORT")
+    MONGO_USERNAME = os.environ.get("MONGO_USERNAME")
+    MONGO_PASSWORD = os.environ.get("MONGO_PASS")
+    MONGO_URI = f"mongodb://{MONGO_USERNAME}:{MONGO_PASSWORD}@{MONGO_HOST}:{MONGO_PORT}/{MONGO_DBNAME}"
     DEBUG = True
 
 

@@ -81,5 +81,6 @@ def create_app(test_config=None):
     # register error Handler
     app.register_error_handler(Exception, all_exception_handler)
 
+
     return app
 

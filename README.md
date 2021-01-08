@@ -6,20 +6,23 @@ You can also save your extract to DB.
 
 ## Architecture
 This app is built as a Docker application so it can be easily run and deployed on different environments.
-It is managed with docker-compose and it consists of 3 containers (services):
+It is managed with docker-compose and it consists of 2 containers (services):
 - **app** - developed in Flask, Python framework for web application
 - **mongo** - Mongo database used by Flask app
 
-#### DEVELOPMENT
-For debug purposes you can run Flask application locally and use the following containers 
+## Development
+For debug purposes you can run Flask application locally 
 ```python
 python manage.py runserver
-``` 
-
+```
+You can also run mongo-express container (database client) together with mongo container to preview your data
 - **mongo** - Mongo database used by Flask app
 - **mongo-express** - Mongo DB client
 
-
-## Continuous Integration
-This project uses Travis CI to automatically test code changes with every git push:
-- runs flake8 for checking code syntax against PEP 8 (Style Guide for Python Code)
+## Configuration
+- **.env** - environment variables for local Flask app run, including
+ ```FLASK_ENV=dev```
+- **docker.env** - environment variables for Docker dev run, including
+  ```FLASK_ENV=docker```
+- **prod.env** - environment variables for Docker production run, including
+```FLASK_ENV=prod```

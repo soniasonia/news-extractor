@@ -10,11 +10,6 @@ services:
    - ./src:/src
   command: >
    sh -c "python manage.py runserver"
-  environment:
-   - DB_HOST=db
-   - DB_NAME=app
-   - DB_USER=postgres
-   - DB_PASS=supersecretpassword
   depends_on:
    - mongo
   env_file:

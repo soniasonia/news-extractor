@@ -1,6 +1,6 @@
 from flask import Blueprint, request, render_template, redirect, session, url_for
 from api.news_get import extract, ALLOWED_URLS
-import json
+
 
 def construct_views_blueprint(mongo):
     main = Blueprint("main", __name__)  # initialize blueprint
