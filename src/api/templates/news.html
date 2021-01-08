@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div class="save">
+    {% if not saved_to_db %}
+    <h1>Articles extracted</h1>
+    <h2>Do you want to save them?</h2>
+    <form action ="/api/news/save" method = "post">
+        <input type="submit">
+    </form>
+    {% else %}
+    <h1>Articles saved</h1>
+    {% endif %}
+</div>
+{% if error_msg %}
+<p class="error">Error</p>
+{%endif%}
+<table>
+    {% for item in news %}
+    <tr>
+        <td>{{item.title}}</td>
+        <td>{{item.url}}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}
