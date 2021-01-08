@@ -1,8 +1,7 @@
-from urllib.request import urlopen, urlretrieve
+from urllib.request import urlopen
 from bs4 import BeautifulSoup
-from dataclasses import dataclass
 
-def standarize_putput(func):
+def standarize_output(func):
     def wrap(*args, **kwargs):
         articles = func(*args, **kwargs)
         standard_articles = []
@@ -15,7 +14,7 @@ def standarize_putput(func):
         return standard_articles
     return wrap
 
-@standarize_putput
+@standarize_output
 def extract_tvn24(url):
     with urlopen(url) as response:
         soup = BeautifulSoup(response.read(), "html.parser")
@@ -24,14 +23,11 @@ def extract_tvn24(url):
     articles = [{"title": div.get_text(), "url": div.a['href']} for div in result]
 
     result = soup.select(".virtual-page>div.teaser-wrapper>article>div>div")
-    more_articles = [{"title": div.get_text(), "url": div.a['href']} for div in result]
+    more_articles = [{"title": div.select("h2")[0].get_text() if len(div.select("h2")) > 0 else "",
+                      "url": div.a['href']} for div in result]
 
     articles.extend(more_articles)
     return articles
-
-def save_to_db(articles):
-    pass
-
 
 ALLOWED_URLS={"https://tvn24.pl/": extract_tvn24}
 
@@ -40,6 +36,3 @@ def extract(url):
         func = ALLOWED_URLS[url]
         return func(url)
     return f"{url} not implemented"
-
-# extract("https://tvn24.pl/")
-# extract("https://www.wp.pl/")

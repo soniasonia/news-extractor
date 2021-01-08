@@ -26,19 +26,19 @@ class DevelopmentConfig(Config):
     """
 
     MONGO_DBNAME = os.environ.get(
-        "MONGO_DBNAME", "mydb"
+        "MONGO_DBNAME"
     )
     MONGO_HOST = os.environ.get(
-        "MONGO_HOST", "localhost"
+        "MONGO_HOST"
     )
     MONGO_PORT = os.environ.get(
-        "MONGO_PORT", 27017
+        "MONGO_PORT"
     )
     MONGO_USERNAME = os.environ.get(
-        "MONGO_USERNAME","sonia"
+        "MONGO_USERNAME"
     )
     MONGO_PASSWORD = os.environ.get(
-        "MONGO_PASS","12345"
+        "MONGO_PASS"
     )
     MONGO_URI = f"mongodb://{MONGO_USERNAME}:{MONGO_PASSWORD}@{MONGO_HOST}:{MONGO_PORT}/{MONGO_DBNAME}"
     DEBUG = True

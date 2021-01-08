@@ -4,6 +4,7 @@ import logging
 from flask import Flask, request
 from flask_cors import CORS
 from flask_pymongo import PyMongo
+from flask_session import Session
 
 from api.config import config
 from api.core import all_exception_handler
@@ -63,9 +64,13 @@ def create_app(test_config=None):
     root = logging.getLogger("core")
     root.addHandler(strm)
 
-
+    # Mongo DB
     mongo = PyMongo(app)
 
+    # Session
+    app.config["SESSION_PERMANENT"] = False
+    app.config["SESSION_TYPE"] = "filesystem"
+    Session(app)
 
     # import and register blueprints
     from api.views.main import construct_views_blueprint

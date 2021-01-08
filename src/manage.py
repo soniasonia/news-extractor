@@ -4,7 +4,6 @@ from api import create_app
 
 # sets up the app
 app = create_app()
-
 manager = Manager(app)
 
 
