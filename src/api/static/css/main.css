@@ -1,0 +1,34 @@
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #444;
+  text-align: center;
+}
+
+table {
+    margin: 5px;
+    padding: 5px;
+    width: 80%;
+    border: 1px solid black;
+}
+
+h1 {
+  margin: 5px;
+  padding: 5px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #444;
+}
+
+.save {
+  margin: 5px;
+  padding: 5px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #444;
+  text-align: center;
+}
+
+
+.error {
+  margin: 5;
+  padding: 5;
+  color: #B22222;
+}

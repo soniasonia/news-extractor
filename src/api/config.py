@@ -5,6 +5,7 @@ docker-compose. Production is used in Heroku as well as Zeit now. You may change
 DO NOT HARD CODE YOUR PRODUCTION URLS EVER. Either use creds.ini or use environment variables.
 """
 import os
+from dotenv import load_dotenv
 
 # more configuration options here http://flask.pocoo.org/docs/1.0/config/
 class Config:
@@ -24,22 +25,12 @@ class DevelopmentConfig(Config):
     This defaults the Database URL that can be created through the docker
     cmd in the setup instructions. You can change this to environment variable as well.
     """
-
-    MONGO_DBNAME = os.environ.get(
-        "MONGO_DBNAME"
-    )
-    MONGO_HOST = os.environ.get(
-        "MONGO_HOST"
-    )
-    MONGO_PORT = os.environ.get(
-        "MONGO_PORT"
-    )
-    MONGO_USERNAME = os.environ.get(
-        "MONGO_USERNAME"
-    )
-    MONGO_PASSWORD = os.environ.get(
-        "MONGO_PASS"
-    )
+    load_dotenv()
+    MONGO_DBNAME = os.environ.get("MONGO_DBNAME")
+    MONGO_HOST = os.environ.get("MONGO_HOST")
+    MONGO_PORT = os.environ.get("MONGO_PORT")
+    MONGO_USERNAME = os.environ.get("MONGO_USERNAME")
+    MONGO_PASSWORD = os.environ.get("MONGO_PASS")
     MONGO_URI = f"mongodb://{MONGO_USERNAME}:{MONGO_PASSWORD}@{MONGO_HOST}:{MONGO_PORT}/{MONGO_DBNAME}"
     DEBUG = True
 

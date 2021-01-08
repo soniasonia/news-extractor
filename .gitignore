@@ -6,4 +6,4 @@ pyvenv.cfg
 __pycache__/
 flask_session/
 *.log
-.env
+*.env

@@ -6,8 +6,11 @@ from flask_cors import CORS
 from flask_pymongo import PyMongo
 from flask_session import Session
 
-from src.api.config import config
+from api.config import config
 from api.core import all_exception_handler
+
+# import and register blueprints
+from api.views.main import construct_views_blueprint
 
 
 class RequestFormatter(logging.Formatter):
@@ -71,9 +74,6 @@ def create_app(test_config=None):
     app.config["SESSION_PERMANENT"] = False
     app.config["SESSION_TYPE"] = "filesystem"
     Session(app)
-
-    # import and register blueprints
-    from src.api.views import construct_views_blueprint
 
     # why blueprints http://flask.pocoo.org/docs/1.0/blueprints/
     app.register_blueprint(construct_views_blueprint(mongo))

@@ -1,5 +1,5 @@
 from flask import Blueprint, request, render_template, redirect, session, url_for
-from src.api.news_get import extract, ALLOWED_URLS
+from api.news_get import extract, ALLOWED_URLS
 import json
 
 def construct_views_blueprint(mongo):
@@ -15,7 +15,7 @@ def construct_views_blueprint(mongo):
     @main.route('/api/news', methods=['GET'])
     def news():
         if not request.args.get("url") or request.args.get("url") not in ALLOWED_URLS.keys():
-            session["error_msg"] = json.dumps({"main":"Scrapper for this page is not implemented yet"})
+            session["error_msg"] = "Scrapper for this page is not implemented yet"
             return redirect(url_for('.index'))
         else:
             session["error_msg"] = ""
