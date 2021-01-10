@@ -21,9 +21,13 @@ For development and debug purposes you can run Flask application locally (outsid
     sudo docker-compose up mongo
     sudo docker-compose up mongo-express
     ```
-2. Create database and user
+2. Create DB user
+   - login to Mongo DB using initial creds
    ```
-   sudo docker exec -it [container] mongo
+   sudo docker exec -it [container] mongo admin --username root --password secret
+   ```
+   - create database and user dedicated to the application
+   ```
    db.getSiblingDB('simple-app-db').createUser({user:'user', pwd:'pass', 
    roles:[{role:'readWrite',db:'simple-app-db'}]})
     ```
