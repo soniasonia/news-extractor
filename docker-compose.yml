@@ -12,8 +12,9 @@ services:
    sh -c "python manage.py runserver"
   depends_on:
    - mongo
-  env_file:
-   - docker.env
+  environment:
+    MONGO_URI: mongodb://user:pass@mongo:27017/simple-app-db
+    FLASK_ENV: dev
 
  mongo:
   image: mongo
