@@ -2,6 +2,7 @@
 
 Page that allows you to read news without ads. 
 Simply provide website URL and click "Extract" to scrap the selected page and receive a pure list of article titles and their direct urls.
+
 ![Screenshot](./docs/pics/start_page.png)
 
 You can also save your extract to DB.
