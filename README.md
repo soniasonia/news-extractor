@@ -14,7 +14,7 @@ It is managed with docker-compose and it consists of 2 containers (services):
 - **app** - developed in Flask, Python framework for web application
 - **mongo** - Mongo database used by Flask app
 
-## Development
+## Run for development
 For development and debug purposes you can run Flask application locally (outside Docker) 
 1. Run Docker service for mongo DB and DB client
     ```
@@ -39,4 +39,53 @@ For development and debug purposes you can run Flask application locally (outsid
 5. Run application
     ```python
     python manage.py runserver
+    ```
+## Run in Docker (dev)
+Database and user are created automatically while mongo DB initialization, using mongo-init.js.
+1. Simply run Docker services
+    ```
+    sudo docker-compose up mongo
+    sudo docker-compose up mongo-express
+    sudo-docker-compose up app
+    ```
+    
+ ## Run in Docker (prod)
+1. Update mongo-init.js
+    ```
+    db.auth('admin-user', 'admin-pass')
+
+    db = db.getSiblingDB('simple-app')
+
+    db.createUser(
+            {
+                user: "user",
+                pwd: "pass",
+                roles: [
+                    {
+                        role: "readWrite",
+                        db: "simple-app"
+                    }
+                ]
+            }
+    );
+    ```
+2. Update docker-compose.yml
+    ```
+    services:
+     app:
+      environment:
+       MONGO_URI: valid-mongo-uri
+       FLASK_ENV: prod
+       
+     mongo:
+      environment:
+        MONGO_INITDB_ROOT_USERNAME: admin-user
+        MONGO_INITDB_ROOT_PASSWORD: admin-pass
+        MONGO_INITDB_DATABASE: admin
+    ```
+
+3. Run application
+    ```
+    sudo docker-compose up mongo
+    sudo-docker-compose up app
     ```
