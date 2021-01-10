@@ -1,6 +1,5 @@
-import configparser
 import logging
-from typing import Tuple, List
+from typing import Tuple
 
 from werkzeug.local import LocalProxy
 from flask import current_app, jsonify
@@ -16,10 +15,12 @@ def create_response(
 ) -> Tuple[Response, int]:
     """Wraps response in a consistent format throughout the API.
 
-    Format inspired by https://medium.com/@shazow/how-i-design-json-api-responses-71900f00f2db
+    Format inspired by
+    https://medium.com/@shazow/how-i-design-json-api-responses-71900f00f2db
     Modifications included:
     - make success a boolean since there's only 2 values
-    - make message a single string since we will only use one message per response
+    - make message a single string since we will only use
+      one message per response
     IMPORTANT: data must be a dictionary where:
     - the key is the name of the type of data
     - the value is the data itself
@@ -31,7 +32,9 @@ def create_response(
     if type(data) is not dict and data is not None:
         raise TypeError("Data should be a dictionary 😞")
 
-    response = {"success": 200 <= status < 300, "message": message, "result": data}
+    response = {"success": 200 <= status < 300,
+                "message": message,
+                "result": data}
     return jsonify(response), status
 
 

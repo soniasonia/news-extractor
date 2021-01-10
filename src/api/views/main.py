@@ -1,4 +1,5 @@
-from flask import Blueprint, request, render_template, redirect, session, url_for
+from flask import Blueprint, session
+from flask import request, render_template, redirect, url_for
 from api.scrapper.news_get import extract, ALLOWED_URLS
 
 
@@ -11,11 +12,11 @@ def construct_views_blueprint(mongo):
         session["error_msg"] = ""
         return render_template("index.html", error_msg=err)
 
-
     @main.route('/api/news', methods=['GET'])
     def news():
-        if not request.args.get("url") or request.args.get("url") not in ALLOWED_URLS.keys():
-            session["error_msg"] = "Scrapper for this page is not implemented yet"
+        if not request.args.get("url") \
+                or request.args.get("url") not in ALLOWED_URLS.keys():
+            session["error_msg"] = "Scrapper for this page is not implemented"
             return redirect(url_for('.index'))
         else:
             session["error_msg"] = ""
@@ -35,4 +36,3 @@ def construct_views_blueprint(mongo):
             return render_template("news.html", news=data, error_msg=err)
 
     return main
-

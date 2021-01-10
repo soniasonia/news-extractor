@@ -20,7 +20,8 @@ class RequestFormatter(logging.Formatter):
         return super().format(record)
 
 
-# why we use application factories http://flask.pocoo.org/docs/1.0/patterns/appfactories/#app-factories
+# why we use application factories
+# http://flask.pocoo.org/docs/1.0/patterns/appfactories/#app-factories
 def create_app(test_config=None):
     app = Flask(__name__)
 
@@ -32,7 +33,8 @@ def create_app(test_config=None):
 
     # logging
     formatter = RequestFormatter(
-        "%(asctime)s %(remote_addr)s: requested %(url)s: %(levelname)s in [%(module)s: %(lineno)d]: %(message)s"
+        "%(asctime)s %(remote_addr)s: requested %(url)s: %(levelname)s "
+        "in [%(module)s: %(lineno)d]: %(message)s"
     )
     if app.config.get("LOG_FILE"):
         fh = logging.FileHandler(app.config.get("LOG_FILE"))
@@ -68,4 +70,3 @@ def create_app(test_config=None):
     app.register_error_handler(Exception, all_exception_handler)
 
     return app
-
