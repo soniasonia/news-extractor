@@ -1,5 +1,5 @@
 from flask import Blueprint, request, render_template, redirect, session, url_for
-from api.news_get import extract, ALLOWED_URLS
+from api.scrapper.news_get import extract, ALLOWED_URLS
 
 
 def construct_views_blueprint(mongo):
