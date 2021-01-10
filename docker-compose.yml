@@ -8,8 +8,6 @@ services:
    - "5000:5000"
   volumes:
    - ./src:/src
-  links:
-    - mongo:mongo
   command: >
    sh -c "python manage.py runserver"
   depends_on:

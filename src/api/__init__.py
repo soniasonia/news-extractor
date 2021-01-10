@@ -22,30 +22,13 @@ class RequestFormatter(logging.Formatter):
 
 # why we use application factories http://flask.pocoo.org/docs/1.0/patterns/appfactories/#app-factories
 def create_app(test_config=None):
-    """
-    The flask application factory. To run the app somewhere else you can:
-    ```
-    from api import create_app
-    app = create_app()
-    if __main__ == "__name__":
-        app.run()
-    """
     app = Flask(__name__)
 
     CORS(app)  # add CORS
 
     # check environment variables to see which config to load
     env = os.environ.get("FLASK_ENV", "dev")
-    # for configuration options, look at api/config.py
-    if test_config:
-        # purposely done so we can inject test configurations
-        # this may be used as well if you'd like to pass
-        # in a separate configuration although I would recommend
-        # adding/changing it in api/config.py instead
-        # ignore environment variable config if config was given
-        app.config.from_mapping(**test_config)
-    else:
-        app.config.from_object(config[env])  # config dict is from api/config.py
+    app.config.from_object(config[env])  # config dict is from api/config.py
 
     # logging
     formatter = RequestFormatter(
@@ -70,17 +53,19 @@ def create_app(test_config=None):
     # Mongo DB
     mongo = PyMongo(app)
 
-    # Session
+    # Use Session from Flask-Session
+    # Flask-Session is an extension that adds support for server-side session
+    # It means that session data is stored on server instead of cookie
     app.config["SESSION_PERMANENT"] = False
     app.config["SESSION_TYPE"] = "filesystem"
     Session(app)
 
+    # Register blueprint
     # why blueprints http://flask.pocoo.org/docs/1.0/blueprints/
     app.register_blueprint(construct_views_blueprint(mongo))
 
     # register error Handler
     app.register_error_handler(Exception, all_exception_handler)
-
 
     return app
 
