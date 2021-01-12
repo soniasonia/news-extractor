@@ -43,4 +43,4 @@ def extract(url):
     if url in ALLOWED_URLS.keys():
         func = ALLOWED_URLS[url]
         return func(url)
-    return f"{url} not implemented"
+    raise Exception(f"Scrapper for {url} not implemented")

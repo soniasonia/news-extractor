@@ -2,27 +2,54 @@
 
 {% block body %}
 
-<div class="save">
-    {% if not saved_to_db %}
-    <h1>Articles extracted</h1>
-    <h2>Do you want to save them?</h2>
-    <form action ="/api/news/save" method = "post">
-        <input type="submit">
-    </form>
-    {% else %}
-    <h1>Articles saved</h1>
-    {% endif %}
-</div>
-{% if error_msg %}
-<p class="error">{{ error_msg }}</p>
-{%endif%}
-<table>
-    {% for item in news %}
-    <tr>
-        <td>{{item.title}}</td>
-        <td>{{item.url}}</td>
-    </tr>
-    {% endfor %}
-</table>
+    <div id="panel">
+        <h1>Articles extracted</h1>
+        <h2>Do you want to save them?</h2>
+        <button id="save">Save to DB</button>
+    </div>
+    <div id="data">
+        <p id="status"></p>
+        <table>
+            {% for item in news %}
+                <tr>
+                    <td>{{item.title}}</td>
+                    <td>{{item.url}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <script>
+        let button = document.querySelector('#save');
+        let status = document.querySelector('#status');
+        console.log(button);
+        console.log(status);
+        let data = {{news|tojson}};
+        button.addEventListener('click', function() {
+          fetch('/api/news/save', {
+              method: 'POST',
+              body: JSON.stringify(data),
+              headers: {
+              'Content-Type': 'application/json'
+                }
+          }).then(response =>
+                {
+      console.log(response);
+      console.log(response.status);
+      console.log(response.json());
+                if (response.status == 200)
+                    {
+                        status.innerText = "Success";
+                        status.style.color = "green";
+                        button.disabled = true;
+                    }
+                else
+                    {
+                        status.innerText = "Something went wrong...";
+                        status.style.color = "red";
+                    }
+                 });
+          });
+    </script>
 
 {% endblock %}
