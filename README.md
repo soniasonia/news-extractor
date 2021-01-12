@@ -15,13 +15,21 @@ It is managed with docker-compose and it consists of 2 containers (services):
 - **mongo** - Mongo database used by Flask app
 
 ## Run for development
-For development and debug purposes you can run Flask application locally (outside Docker) 
-1. Run Docker service for mongo DB and DB client
+For development and debug purposes you can run Flask application locally (outside Docker).
+
+1. Create Python virtual env and install the requirements
+    - example for Linux
+    ```
+    python3 -m venv venv
+    source venv/bin/activate
+    pip install -r backend/requirements.txt
+    ```
+2. Run Docker service for mongo DB and DB client
     ```
     sudo docker-compose up mongo
     sudo docker-compose up mongo-express
     ```
-2. Create DB user
+3. Create DB user
    - login to Mongo DB using initial creds
    ```
    sudo docker exec -it [container] mongo admin --username root --password secret
