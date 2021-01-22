@@ -1,7 +1,7 @@
 from flask import Blueprint, session
 from flask import request, render_template, redirect, url_for
 from api.core import logger, create_response
-from api.scrapper.news_get import extract
+from api.scrapper import collect_articles
 from api.repository.mongo import save_articles
 import json
 
@@ -28,7 +28,7 @@ def construct_views_blueprint(mongo):
             return redirect(url_for('.index'))
         try:
             news_url = request.args.get("url")
-            data = extract(news_url)
+            data = collect_articles(news_url)
             return render_template("news.html", news=data, saved_to_db=False)
         except Exception as e:
             session["error_msg"] = e
