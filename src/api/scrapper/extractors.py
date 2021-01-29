@@ -43,4 +43,4 @@ def get_extractor(url: str) -> Extractor:
     for ex in EXTRACTORS:
         if ex.url == url:
             return ex()
-    raise Exception(f"Scrapper for {url} not implemented")
+    raise NotImplementedError
