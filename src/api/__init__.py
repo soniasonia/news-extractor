@@ -7,7 +7,7 @@ from flask_pymongo import PyMongo
 from flask_session import Session
 
 from api.config import config
-from api.core import all_exception_handler
+from api.core import prepare_error_response
 
 # import and register blueprints
 from api.views.main import construct_views_blueprint
@@ -29,6 +29,7 @@ def create_app(test_config=None):
 
     # check environment variables to see which config to load
     env = os.environ.get("FLASK_ENV", "dev")
+
     app.config.from_object(config[env])  # config dict is from api/config.py
 
     # logging
@@ -66,7 +67,11 @@ def create_app(test_config=None):
     # why blueprints http://flask.pocoo.org/docs/1.0/blueprints/
     app.register_blueprint(construct_views_blueprint(mongo))
 
-    # register error Handler
-    app.register_error_handler(Exception, all_exception_handler)
+    # register error response that logs to app.logger and returns unified response
+    def exception_handler_wrapper(error):
+        root.error(error)
+        return prepare_error_response(error)
+
+    app.register_error_handler(Exception, exception_handler_wrapper)
 
     return app

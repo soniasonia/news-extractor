@@ -38,11 +38,7 @@ def create_response(
     return jsonify(response), status
 
 
-# add specific Exception handlers before this, if needed
-# More info at http://flask.pocoo.org/docs/1.0/patterns/apierrors/
-def all_exception_handler(error: Exception) -> Tuple[Response, int]:
-    """Catches and handles all exceptions, add more specific error Handlers.
-    :param Exception
-    :returns Tuple of a Flask Response and int
-    """
-    return create_response(message=str(error), status=500)
+def prepare_error_response(error: Exception) -> Tuple[Response, int]:
+    status = error.code or 500
+    message = error.description or "Internal Server Error"
+    return create_response(message=message, status=status)
