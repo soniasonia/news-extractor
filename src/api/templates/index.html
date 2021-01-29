@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
 
 {% block body %}
-
-    <h1>Check the latest news</h1>
-    <form action ="/api/news" method = "get">
-        <input name="url" type="text" autocomplete="off" autofocus placeholder="Provide url...">
-        <input type="submit" value="Extract">
-    </form>
-
+    <div class="main">
+        <h1>Check the latest news</h1>
+        <form action ="/api/news" method = "get">
+            <input name="url" type="text" autocomplete="off" autofocus placeholder="Provide url...">
+            <input type="submit" value="Extract">
+        </form>
+    </div>
 {% endblock %}
