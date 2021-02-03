@@ -20,9 +20,9 @@
     </div>
 
     <script>
-        let button = document.querySelector('#save');
-        let status = document.querySelector('#status');
-        let data = {{news|tojson}};
+        const button = document.querySelector('#save');
+        const status = document.querySelector('#status');
+        const data = {{news|tojson}};
         button.addEventListener('click', function() {
           fetch('/api/news/save', {
               method: 'POST',
@@ -39,8 +39,15 @@
                     }
                 else
                     {
-                        status.innerText = "Something went wrong...";
-                        status.style.color = "red";
+                        response.json()
+                        .then(body => {
+                            const err_code = String(response.status)
+                            const details = body.message
+                            const text = details.concat(" (error ",err_code,")")
+                            status.innerText = text;
+                            status.style.color = "red";
+                            }
+                        )
                     }
                  });
           });

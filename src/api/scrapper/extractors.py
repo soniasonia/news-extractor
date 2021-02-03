@@ -2,7 +2,7 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 from abc import ABC, abstractmethod
 from typing import List
-from api.data.news import Article, TvnArticle
+from api.data.news import Article, TvnArticle, TestArticle
 
 
 class Extractor(ABC):
@@ -45,7 +45,20 @@ class TvnExtractor(Extractor):
         return articles
 
 
-EXTRACTORS = {TvnExtractor}
+class FakeExtractor(Extractor):
+    url = "fake"
+
+    def extract(self) -> List[TestArticle]:
+        articles = []
+        for i in range(10):
+            title = 'Fake {:.>10}'.format(i)
+            url = 'https://someurl{}.test'.format(i)
+            articles.append(TestArticle(title=title, url=url))
+
+        return articles
+
+
+EXTRACTORS = {TvnExtractor, FakeExtractor}
 
 
 def get_extractor(url: str) -> Extractor:
