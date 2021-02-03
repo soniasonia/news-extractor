@@ -30,7 +30,8 @@
               headers: {
               'Content-Type': 'application/json'
                 }
-          }).then(response => {
+            })
+            .then(response => {
                 if (response.status == 200)
                     {
                         status.innerText = "Success";
@@ -39,18 +40,21 @@
                     }
                 else
                     {
-                        response.json()
+                        const resp_code = String(response.status);
+                        return response.json()
                         .then(body => {
-                            const err_code = String(response.status)
                             const details = body.message
-                            const text = details.concat(" (error ",err_code,")")
+                            const text = details.concat(" (status code: ",resp_code,")")
                             status.innerText = text;
                             status.style.color = "red";
-                            }
-                        )
+                        })
                     }
-                 });
-          });
+            })
+            .catch(error => {
+                status.innerText = String(error)
+                status.style.color = "red";
+            })
+            });
     </script>
 
 {% endblock %}

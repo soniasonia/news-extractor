@@ -28,8 +28,8 @@ def construct_views_blueprint(mongo):
 
     @main.route('/api/news/save', methods=['POST'])
     def save():
-        data = json.loads(request.data)
         try:
+            data = json.loads(request.data)
             save_articles(mongo, data)
             return create_response(message=str("Success"), status=200)
         except TypeError as e:
