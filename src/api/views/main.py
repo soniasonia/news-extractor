@@ -1,6 +1,6 @@
 from flask import Blueprint, session
 from flask import request, render_template, redirect, url_for
-from api.core import logger, create_response
+from api.core import core_logger, create_response
 from api.scrapper import collect_articles
 from api.repository.mongo import save_articles
 import json
@@ -32,8 +32,12 @@ def construct_views_blueprint(mongo):
         try:
             save_articles(mongo, data)
             return create_response(message=str("Success"), status=200)
+        except TypeError as e:
+            core_logger.error(e)
+            user_msg = str(e)
+            return create_response(message=str(user_msg), status=400)
         except Exception as e:
-            logger.error(e)
+            core_logger.error(e)
             user_msg = "Something went wrong"
             return create_response(message=str(user_msg), status=500)
 
