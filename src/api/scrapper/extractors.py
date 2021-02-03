@@ -4,7 +4,6 @@ from abc import ABC, abstractmethod
 from typing import List
 from api.data.news import Article, TvnArticle
 
-# Implement PEP 3107 -- Function Annotations
 
 class Extractor(ABC):
     @property
@@ -16,28 +15,38 @@ class Extractor(ABC):
     def extract(self) -> List[Article]:
         pass
 
+    def parse_page(self) -> BeautifulSoup:
+        with urlopen(self.url) as response:
+            return BeautifulSoup(response.read(), "html.parser")
+
 
 class TvnExtractor(Extractor):
     url = "https://tvn24.pl/"
+
     def extract(self) -> List[TvnArticle]:
-        with urlopen(self.url) as response:
-            soup = BeautifulSoup(response.read(), "html.parser")
+        soup = self.parse_page()
+        articles = []
 
-        result = soup.select(".news-of-the-day>ul>li>div>div")
-        articles = [TvnArticle(title=div.get_text(), url=div.a['href'])
-                    for div in result]
+        css_selector = ".news-of-the-day>ul>li>div>div"
+        result = soup.select(css_selector)
+        for div in result:
+            title = div.get_text()
+            url = div.a['href']
+            articles.append(TvnArticle(title=title, url=url))
 
-        result = soup.select(".virtual-page>div.teaser-wrapper>article>div>div")
-        more_articles = [TvnArticle(
-            title=div.select("h2")[0].get_text()
-            if len(div.select("h2")) > 0 else "",
-            url=div.a['href'])
-            for div in result]
+        css_selector = ".virtual-page>div.teaser-wrapper>article>div>div"
+        result = soup.select(css_selector)
+        for div in result:
+            if len(div.select("h2")) > 0:
+                title = div.select("h2")[0].get_text()
+                url = div.a['href']
+                articles.append(TvnArticle(title=title, url=url))
 
-        articles.extend(more_articles)
         return articles
 
+
 EXTRACTORS = {TvnExtractor}
+
 
 def get_extractor(url: str) -> Extractor:
     for ex in EXTRACTORS:

@@ -10,10 +10,12 @@ def test_news_endpoint_url(test_client):
         assert b"Articles extracted" in response.data
         assert b"https://test1.pl" in response.data
 
+
 def test_news_endpoint_no_url(test_client):
     response = test_client.get("/api/news")
     assert response.status_code == 200
     assert b"Please provide url" in response.data
+
 
 def test_news_endpoint_url_not_implemented(test_client):
     response = test_client.get("/api/news?url=wrongurl")

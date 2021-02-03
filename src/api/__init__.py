@@ -65,9 +65,6 @@ def create_app():
     if env != "test":
         mongo = PyMongo()
         mongo.init_app(app)
-        # Add the articles collection if it doesn't already exist
-        if not 'articles' in mongo.db.list_collection_names():
-            articles_collection = mongo.db['articles']
 
     # Use Session from Flask-Session
     # Flask-Session is an extension that adds support for server-side session
@@ -80,7 +77,8 @@ def create_app():
     # why blueprints http://flask.pocoo.org/docs/1.0/blueprints/
     app.register_blueprint(construct_views_blueprint(mongo))
 
-    # register error response that logs to app.logger and returns unified response
+    # register error response that logs to app.logger
+    # and returns unified response
     def exception_handler_wrapper(error):
         root.error(error)
         return prepare_error_response(error)

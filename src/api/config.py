@@ -20,11 +20,13 @@ class DevelopmentConfig(Config):
     LOG_FILE = "api.log"  # where logs are outputted to
     DEBUG = True
 
+
 class TestConfig(Config):
     """
     Requires the environment variable `FLASK_ENV=test`
     """
     DEBUG = True
+
 
 class ProductionConfig(Config):
     """
@@ -35,4 +37,6 @@ class ProductionConfig(Config):
 
 
 # way to map the value of `FLASK_ENV` to a configuration
-config = {"dev": DevelopmentConfig, "test": TestConfig, "prod": ProductionConfig}
+config = {"dev": DevelopmentConfig,
+          "test": TestConfig,
+          "prod": ProductionConfig}

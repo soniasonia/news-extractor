@@ -1,5 +1,5 @@
-from flask import Blueprint, session
-from flask import request, render_template, redirect, url_for
+from flask import Blueprint
+from flask import request, render_template
 from api.core import core_logger, create_response
 from api.scrapper import collect_articles
 from api.repository.mongo import save_articles
@@ -23,7 +23,7 @@ def construct_views_blueprint(mongo):
             data = collect_articles(news_url)
             return render_template("news.html", news=data, saved_to_db=False)
         except NotImplementedError:
-            err = (f"Scrapper for {news_url} not implemented")
+            err = f"Scrapper for {news_url} not implemented"
             return render_template("error.html", error_msg=err)
 
     @main.route('/api/news/save', methods=['POST'])

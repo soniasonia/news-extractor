@@ -10,4 +10,3 @@ def insert_to_db(mongo: PyMongo, valid_data: List[dict]):
 def save_articles(mongo: PyMongo, data: List[dict]):
     valid_data = validate_input(data)
     insert_to_db(mongo, valid_data)
-
