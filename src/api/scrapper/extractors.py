@@ -1,8 +1,8 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
-from abc import ABC, abstractmethod, abstractproperty
+from abc import ABC, abstractmethod
 from typing import List
-from api.scrapper.news import Article, TvnArticle
+from api.data.news import Article, TvnArticle
 
 # Implement PEP 3107 -- Function Annotations
 

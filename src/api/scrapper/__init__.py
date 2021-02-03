@@ -1,5 +1,5 @@
 from typing import List
-from api.scrapper.news import Article, TvnArticle
+from api.data.news import Article
 from api.scrapper.extractors import Extractor, get_extractor
 
 # Implement PEP 3107 -- Function Annotations
