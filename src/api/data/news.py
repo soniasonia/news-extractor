@@ -11,8 +11,3 @@ class Article(ABC):
 @dataclass
 class TvnArticle(Article):
     pass
-
-
-@dataclass
-class TestArticle(Article):
-    pass

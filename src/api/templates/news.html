@@ -2,59 +2,57 @@
 
 {% block body %}
 
-    <div id="panel">
-        <h1>Articles extracted</h1>
-        <h2>Do you want to save them?</h2>
-        <button id="save">Save to DB</button>
-    </div>
-    <div id="data">
-        <p id="status"></p>
-        <table>
-            {% for item in news %}
-                <tr>
-                    <td>{{item.title}}</td>
-                    <td>{{item.url}}</td>
-                </tr>
-            {% endfor %}
-        </table>
-    </div>
+<div id="panel">
+    <h1>Articles extracted</h1>
+    <h2>Do you want to save them?</h2>
+    <button id="save">Save to DB</button>
+</div>
+<div id="data">
+    <p id="status"></p>
+    <table>
+        {% for item in news %}
+        <tr>
+            <td>{{item.title}}</td>
+            <td>{{item.url}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
 
-    <script>
-        const button = document.querySelector('#save');
-        const status = document.querySelector('#status');
-        const data = {{news|tojson}};
-        button.addEventListener('click', function() {
-          fetch('/api/news/save', {
-              method: 'POST',
-              body: JSON.stringify(data),
-              headers: {
-              'Content-Type': 'application/json'
-                }
-            })
+<script>
+    const button = document.querySelector('#save');
+    const status = document.querySelector('#status');
+    const data = {{ news| tojson}};
+    button.addEventListener('click', function () {
+        fetch('/api/news/save', {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
             .then(response => {
-                if (response.status == 200)
-                    {
-                        status.innerText = "Success";
-                        status.style.color = "green";
-                        button.disabled = true;
-                    }
-                else
-                    {
-                        const resp_code = String(response.status);
-                        return response.json()
+                if (response.status == 200) {
+                    status.innerText = "Success";
+                    status.style.color = "green";
+                    button.disabled = true;
+                }
+                else {
+                    const resp_code = String(response.status);
+                    return response.json()
                         .then(body => {
                             const details = body.message
-                            const text = details.concat(" (status code: ",resp_code,")")
+                            const text = details.concat(" (status code: ", resp_code, ")")
                             status.innerText = text;
                             status.style.color = "red";
                         })
-                    }
+                }
             })
             .catch(error => {
                 status.innerText = String(error)
                 status.style.color = "red";
             })
-            });
-    </script>
+    });
+</script>
 
 {% endblock %}

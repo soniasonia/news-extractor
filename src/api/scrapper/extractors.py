@@ -1,8 +1,9 @@
+import os
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 from abc import ABC, abstractmethod
 from typing import List
-from api.data.news import Article, TvnArticle, TestArticle
+from api.data.news import Article, TvnArticle
 
 
 class Extractor(ABC):
@@ -48,17 +49,19 @@ class TvnExtractor(Extractor):
 class FakeExtractor(Extractor):
     url = "fake"
 
-    def extract(self) -> List[TestArticle]:
+    def extract(self) -> List[Article]:
         articles = []
         for i in range(10):
             title = 'Fake {:.>10}'.format(i)
             url = 'https://someurl{}.test'.format(i)
-            articles.append(TestArticle(title=title, url=url))
+            articles.append(Article(title=title, url=url))
 
         return articles
 
 
-EXTRACTORS = {TvnExtractor, FakeExtractor}
+EXTRACTORS = {TvnExtractor}
+if os.environ.get != "prod":
+    EXTRACTORS.add(FakeExtractor)
 
 
 def get_extractor(url: str) -> Extractor:
