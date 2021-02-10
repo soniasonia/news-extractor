@@ -1,38 +1,44 @@
-from flask import Blueprint, session
-from flask import request, render_template, redirect, url_for
-from api.scrapper.news_get import extract, ALLOWED_URLS
+from flask import Blueprint
+from flask import request, render_template
+from api.core import core_logger, create_response
+from api.scrapper import collect_articles
+from api.repository.mongo import save_articles
+import json
 
 
 def construct_views_blueprint(mongo):
     main = Blueprint("main", __name__)  # initialize blueprint
 
-    @main.route("/")
+    @main.route("/", methods=['GET'])
     def index():
-        err = session.get("error_msg")
-        session["error_msg"] = ""
-        return render_template("index.html", error_msg=err)
+        return render_template("index.html")
 
     @main.route('/api/news', methods=['GET'])
     def news():
-        if not request.args.get("url") \
-                or request.args.get("url") not in ALLOWED_URLS.keys():
-            session["error_msg"] = "Scrapper for this page is not implemented"
-            return redirect(url_for('.index'))
-        else:
-            session["error_msg"] = ""
-        news_url = request.args.get('url')
-        data = extract(news_url)
-        session["articles"] = data
-        return render_template("news.html", news=data, saved_to_db=False)
+        news_url = request.args.get("url")
+        if not news_url:
+            err = "Please provide url"
+            return render_template("error.html", error_msg=err)
+        try:
+            data = collect_articles(news_url)
+            return render_template("news.html", news=data, saved_to_db=False)
+        except NotImplementedError:
+            err = f"Scrapper for {news_url} not implemented"
+            return render_template("error.html", error_msg=err)
 
     @main.route('/api/news/save', methods=['POST'])
     def save():
-        data = session["articles"]
-        result = mongo.db.articles.insert(data)
-        if len(result) == len(data):
-            return render_template("news.html", news=data, saved_to_db=True)
-        else:
-            err = "Something went wrong..."
-            return render_template("news.html", news=data, error_msg=err)
+        try:
+            data = json.loads(request.data)
+            save_articles(mongo, data)
+            return create_response(message=str("Success"), status=200)
+        except TypeError as e:
+            core_logger.error(e)
+            user_msg = str(e)
+            return create_response(message=str(user_msg), status=400)
+        except Exception as e:
+            core_logger.error(e)
+            user_msg = "Something went wrong"
+            return create_response(message=str(user_msg), status=500)
 
     return main

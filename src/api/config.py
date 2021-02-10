@@ -10,14 +10,21 @@ class Config:
     # CHANGE SECRET_KEY!! use sha256 and set this as an environment variable
     # os.environ.get("SECRET_KEY")
     SECRET_KEY = "testkey"
-    LOG_FILE = "api.log"  # where logs are outputted to
+    MONGO_URI = os.environ.get("MONGO_URI")
 
 
 class DevelopmentConfig(Config):
     """
     Requires the environment variable `FLASK_ENV=dev`
     """
-    MONGO_URI = os.environ.get("MONGO_URI")
+    LOG_FILE = "api.log"  # where logs are outputted to
+    DEBUG = True
+
+
+class TestConfig(Config):
+    """
+    Requires the environment variable `FLASK_ENV=test`
+    """
     DEBUG = True
 
 
@@ -25,9 +32,11 @@ class ProductionConfig(Config):
     """
     Requires the environment variable `FLASK_ENV=prod`
     """
-    MONGO_URI = os.environ.get("MONGO_URI")
+    LOG_FILE = "api.log"  # where logs are outputted to
     DEBUG = False
 
 
 # way to map the value of `FLASK_ENV` to a configuration
-config = {"dev": DevelopmentConfig, "prod": ProductionConfig}
+config = {"dev": DevelopmentConfig,
+          "test": TestConfig,
+          "prod": ProductionConfig}
